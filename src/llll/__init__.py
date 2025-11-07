@@ -211,8 +211,14 @@ class llll:
         return p._data
 
     def to_file(self, file: str):
-        with open(file, 'w') as f:
-            f.write(self.__str__())
+        ext = os.path.splitext(file)[1]
+        if ext not in ['.txt', '.llll']:
+            raise ValueError(f'Invalid extension: {ext}')
+        if ext == '.txt':
+            with open(file, 'w') as f:
+                f.write(self.__str__())
+        else:
+            raise SystemError('.llll files are not yet supported.')
 
 
 class Parser:
@@ -243,6 +249,20 @@ class Parser:
         """
         # Pack the two integers into a 64-bit binary structure and unpack as a double float
         return struct.unpack('<d', struct.pack('<II', low, high))[0]
+
+    def _convert_from_float(self, value: float):
+        """
+        Converts a single double-precision (64-bit) floating-point value into two 32-bit integers.
+
+        Parameters:
+            value (float): The floating-point number to encode.
+
+        Returns:
+            tuple: A tuple (low, high) where low is the lower 32 bits and high is the higher 32 bits.
+        """
+        # Pack the float as a double and unpack as two 32-bit integers
+        low, high = struct.unpack('<II', struct.pack('<d', value))
+        return low, high
 
     def _parse_native(self, data: str):
 
