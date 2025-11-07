@@ -4,7 +4,7 @@ import struct
 
 
 class llll:
-    """lisp-like linked list."""
+    """Python representation of a lisp-like linked list."""
 
     def __init__(self, *items):
         """Initialize llll with variable number of items.
