@@ -256,6 +256,21 @@ class llll:
 
         self._items[idx] = self._wrap(value)
 
+        def __iter__(self):
+            if self.is_atomic():
+                return iter([])
+            return iter(self._items)
+
+        def __repr__(self):
+            if self.is_atomic():
+                return repr(self._value)
+
+            items_repr = ' '.join(repr(item) for item in self._items)
+            return f"[ {items_repr} ]"
+
+        def __str__(self):
+            return self._to_str(top_level=True, indent=-1, min_depth=2)
+
     def _set_by_address(self, address, value):
         if len(address) == 1:
             self[address[0]] = value
@@ -300,27 +315,12 @@ class llll:
         for item in items:
             self.append(item)
 
-    def __iter__(self):
-        if self.is_atomic():
-            return iter([])
-        return iter(self._items)
-
-    def __repr__(self):
-        if self.is_atomic():
-            return repr(self._value)
-
-        items_repr = ' '.join(repr(item) for item in self._items)
-        return f"[ {items_repr} ]"
-
     def depth(self):
         if self.__len__() == 0:
             return 0
         if self.is_atomic():
             return 1
         return 1 + max((item.depth() for item in self._items), default=0)
-
-    def __str__(self):
-        return self._to_str(top_level=True, indent=-1, min_depth=2)
 
     def _to_str(self, top_level=False, indent=0, min_depth=2):
         if self.is_atomic():
