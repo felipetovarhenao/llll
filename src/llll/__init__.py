@@ -194,14 +194,13 @@ class llll:
             for x in self.__iter__():
                 if x[1][1] == key:
                     return x[1:]
-            return None
+            return llll()
 
         if isinstance(key, slice):
             start = key.start + 1 if key.start is not None else 1
             stop = key.stop if key.stop is not None else len(self._items) + 1
             step = key.step if key.step is not None else 1
 
-            # Convert to 0-based indices
             start_idx = start - \
                 1 if start > 0 else (len(self._items) +
                                      start if start < 0 else 0)
@@ -213,10 +212,8 @@ class llll:
             return llll(*[item.to_python() for item in sliced_items])
 
         if isinstance(key, (tuple, list)):
-            # Address-based access
             return self._get_by_address(key)
 
-        # Single index access (1-based)
         idx = key - 1 if key > 0 else key
         if idx < 0:
             idx = len(self._items) + idx
@@ -387,7 +384,6 @@ class llll:
                 else:
                     new_items.append(item._value)
             else:
-                # Recursively map to nested llll
                 if _current_depth < maxdepth:
                     mapped_item = item.map(
                         func,
@@ -398,7 +394,6 @@ class llll:
                     )
                     new_items.append(mapped_item)
                 else:
-                    # Beyond maxdepth, keep as-is
                     new_items.append(item)
 
         return llll(*new_items)
