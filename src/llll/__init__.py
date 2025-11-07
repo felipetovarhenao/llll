@@ -11,7 +11,7 @@ class llll:
     def __init__(self, *items):
         self._items = []
         for item in items:
-            self._items.append(self._wrap(item))
+            self._items.append(self._to_llll(item))
 
     def __eq__(self, other):
         if not isinstance(other, llll):
@@ -254,7 +254,7 @@ class llll:
         if not (0 <= idx < len(self._items)):
             raise IndexError(f"Index {key} out of range")
 
-        self._items[idx] = self._wrap(value)
+        self._items[idx] = self._to_llll(value)
 
         def __iter__(self):
             if self.is_atomic():
@@ -277,13 +277,12 @@ class llll:
         else:
             self[address[0]]._set_by_address(address[1:], value)
 
-    def _wrap(self, item):
+    def _to_llll(self, item):
         if isinstance(item, llll):
             return item
         elif isinstance(item, (list, tuple)):
             return llll(*item)
         else:
-            # Atomic elements are wrapped in llll
             return llll.__new__(llll)._init_atomic(item)
 
     def wrap(self, n: int = 1):
@@ -307,7 +306,7 @@ class llll:
     def append(self, item):
         if self.is_atomic():
             raise ValueError("Cannot append to atomic llll")
-        self._items.append(self._wrap(item))
+        self._items.append(self._to_llll(item))
 
     def extend(self, items):
         if self.is_atomic():
