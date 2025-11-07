@@ -198,6 +198,9 @@ class llll:
         if self.is_atomic():
             return str(self._value)
 
+        if self.__len__() == 0:
+            return 'null'
+
         # Check if we should use indented format
         use_indented = self.depth() >= min_depth
 
@@ -326,6 +329,5 @@ class Parser:
 
 
 if __name__ == '__main__':
-    l = llll.from_file(
-        '/Users/felipetovarhenao/Documents/llll_files/nums.llll')
-    print(l)
+    x = llll()
+    print(x)
