@@ -96,9 +96,10 @@ class llll:
             other = llll(other)
 
         if self.is_atomic() and other.is_atomic():
-            result = op(self._value, other._value)
             if op_name == 'truediv' and isinstance(self._value, int) and isinstance(other._value, int):
                 result = Fraction(self._value, other._value)
+            else:
+                result = op(self._value, other._value)
             return llll(result)
 
         if self.is_atomic() and not other.is_atomic():
