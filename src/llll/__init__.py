@@ -177,9 +177,9 @@ class llll:
 
     def depth(self):
         """Compute the maximum depth of nested lllls."""
-        if self.is_atomic():
+        if self.__len__() == 0:
             return 0
-        if not self._items:
+        if self.is_atomic():
             return 1
         return 1 + max((item.depth() for item in self._items), default=0)
 
