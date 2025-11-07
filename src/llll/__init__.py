@@ -185,7 +185,7 @@ class llll:
 
     def __getitem__(self, key):
         if key == 0:
-            return
+            return llll()
 
         if self.is_atomic():
             return self.value()
