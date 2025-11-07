@@ -358,21 +358,6 @@ class llll:
         else:
             return cls(obj)
 
-    @classmethod
-    def from_file(cls, file: str):
-        p = Parser(file=file)
-        return p._data
-
-    def to_file(self, file: str):
-        ext = os.path.splitext(file)[1]
-        if ext not in ['.txt', '.llll']:
-            raise ValueError(f'Invalid extension: {ext}')
-        if ext == '.txt':
-            with open(file, 'w') as f:
-                f.write(self.__str__())
-        else:
-            raise SystemError('.llll files are not yet supported.')
-
     def map(self, func, mindepth=1, maxdepth=float('inf'), _current_depth=1, _address=()):
         if self.is_atomic():
             if mindepth <= _current_depth <= maxdepth:
@@ -409,6 +394,21 @@ class llll:
                     new_items.append(item)
 
         return llll(*new_items)
+
+    @classmethod
+    def from_file(cls, file: str):
+        p = Parser(file=file)
+        return p._data
+
+    def to_file(self, file: str):
+        ext = os.path.splitext(file)[1]
+        if ext not in ['.txt', '.llll']:
+            raise ValueError(f'Invalid extension: {ext}')
+        if ext == '.txt':
+            with open(file, 'w') as f:
+                f.write(self.__str__())
+        else:
+            raise SystemError('.llll files are not yet supported.')
 
 
 class Parser:
