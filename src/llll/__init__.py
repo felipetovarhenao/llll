@@ -102,6 +102,8 @@ class llll:
             return llll(result)
 
         if self.is_atomic() and not other.is_atomic():
+            if len(other._items) == 1 and other._items[0].is_atomic():
+                return self._arithmetic_op(other._items[0], op, op_name)
             new_items = []
             for item in other._items:
                 result = self._arithmetic_op(item, op, op_name)
@@ -114,6 +116,12 @@ class llll:
                 result = item._arithmetic_op(other, op, op_name)
                 new_items.append(result)
             return llll(*new_items)
+
+        if len(other._items) == 1 and other._items[0].is_atomic():
+            return self._arithmetic_op(other._items[0], op, op_name)
+
+        if len(self._items) == 1 and self._items[0].is_atomic():
+            return self._items[0]._arithmetic_op(other, op, op_name)
 
         if len(self._items) != len(other._items):
             raise ValueError(
