@@ -247,7 +247,6 @@ class Parser:
         Returns:
             float: The decoded floating-point number.
         """
-        # Pack the two integers into a 64-bit binary structure and unpack as a double float
         return struct.unpack('<d', struct.pack('<II', low, high))[0]
 
     def _convert_from_float(self, value: float):
@@ -260,7 +259,6 @@ class Parser:
         Returns:
             tuple: A tuple (low, high) where low is the lower 32 bits and high is the higher 32 bits.
         """
-        # Pack the float as a double and unpack as two 32-bit integers
         low, high = struct.unpack('<II', struct.pack('<d', value))
         return low, high
 
