@@ -1,6 +1,8 @@
 import os
 import json
 import struct
+import re
+from fractions import Fraction
 
 
 class llll:
@@ -323,11 +325,17 @@ class Parser:
                     if item == "_x_x_x_x_bach_float64_x_x_x_x_":
                         low, high = (next(items) for _ in range(2))
                         item = self._convert_to_float(low=low, high=high)
+                    elif isinstance(item, str):
+                        pat = re.compile(pattern=r"[+-]?\d+/\d+")
+                        match = pat.search(item)
+                        if match:
+                            rat = match[0].split('/')
+                            item = Fraction(int(rat[0]), int(rat[1]))
+
                     l.append(item)
 
         return consume()
 
 
 if __name__ == '__main__':
-    x = llll()
-    print(x)
+    pass
