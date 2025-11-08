@@ -208,7 +208,7 @@ class llll:
             return llll()
 
         if isinstance(key, slice):
-            start = key.start + 1 if key.start is not None else 1
+            start = key.start if key.start is not None else 1
             stop = key.stop if key.stop is not None else len(self._items) + 1
             step = key.step if key.step is not None else 1
 
