@@ -1,3 +1,13 @@
+""" 
+author:         Felipe Tovar-Henao
+email:          felipe.tovar@ufl.edu
+date:           2025-11-08
+description:    class definitions for llll and parser objects
+license: MIT
+
+copyright (c) 2025 Felipe Tovar-Henao
+"""
+
 import os
 import json
 import struct
