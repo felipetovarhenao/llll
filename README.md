@@ -119,8 +119,8 @@ l.depth()         # 2
 l.to_python()     # [1, [2.5, 3]]
 l.append([4, 5])  # 1 [ 2.5 3 ] [ 4 5 ]
 l.extend([4, 5])  # 1 [ 2.5 3 ] 4 5
-l.as_float()  # 1.0 [ 2.5 3.0 ] 4.0 5.0
-l.as_int()  # 1 [ 2 3 ] 4 5
+l.as_float()      # 1.0 [ 2.5 3.0 ] 4.0 5.0
+l.as_int()        # 1 [ 2 3 ] 4 5
 ```
 
 ## Key Features
