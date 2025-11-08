@@ -317,8 +317,19 @@ class llll:
 
     def _init_atomic(self, value) -> Self:
         self._items = None
+        if isinstance(value, bool):
+            value = int(value)
         self._value = value
         return self
+
+    def as_float(self):
+        return self.map(lambda x, addr: float(x))
+
+    def as_int(self):
+        return self.map(lambda x, addr: int(x))
+
+    def as_rat(self):
+        return self.map(lambda x, addr: Fraction.from_float(x))
 
     def is_atomic(self) -> bool:
         return self._items is None
