@@ -254,20 +254,20 @@ class llll:
 
         self._items[idx] = self._to_llll(value)
 
-        def __iter__(self):
-            if self.is_atomic():
-                return iter([])
-            return iter(self._items)
+    def __iter__(self):
+        if self.is_atomic():
+            return iter([])
+        return iter(self._items)
 
-        def __repr__(self):
-            if self.is_atomic():
-                return repr(self._value)
+    def __repr__(self):
+        if self.is_atomic():
+            return repr(self._value)
 
-            items_repr = ' '.join(repr(item) for item in self._items)
-            return f"[ {items_repr} ]"
+        items_repr = ' '.join(repr(item) for item in self._items)
+        return f"[ {items_repr} ]"
 
-        def __str__(self):
-            return self._to_str(top_level=True, indent=-1, min_depth=2)
+    def __str__(self):
+        return self._to_str(top_level=True, indent=-1, min_depth=2)
 
     def _set_by_address(self, address, value):
         if len(address) == 1:
