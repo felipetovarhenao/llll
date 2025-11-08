@@ -35,6 +35,20 @@ z = llll(1, 2, [3, 4], 5)  # 1 2 [ 3 4 ] 5
 data = llll.from_python([1, [2, 3], 4]) # 1 [ 2 3 ] 4
 ```
 
+### File I/O
+
+```python
+# Save to file
+l = llll(1, 2, [3, 4])
+l.write("data.txt")      # Human-readable format
+l.write("data.llll")     # Native llll format
+
+# Load from file
+from_txt = llll.read("data.txt")
+from_llll = llll.read("data.llll")
+print(l == from_txt == from_llll) # True
+```
+
 ### Indexing
 
 llll uses 1-based indexing by convention:
@@ -105,19 +119,6 @@ l.map(lambda x, addr: x * 10,
 ```
 
 The mapping function receives both the value and its address (tuple of indices).
-
-### File I/O
-
-```python
-# Save to file
-l = llll(1, 2, [3, 4])
-l.write("data.txt")      # Human-readable format
-l.write("data.llll")     # Native llll format
-
-# Load from file
-from_txt = llll.read("data.txt")
-from_llll = llll.read("data.llll")
-```
 
 ### Utility Methods
 
