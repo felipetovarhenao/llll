@@ -1,3 +1,8 @@
+![version](https://img.shields.io/pypi/v/llll-py)
+![downloads](https://img.shields.io/pypi/dm/llll-py)
+![last_commit](https://img.shields.io/github/last-commit/felipetovarhenao/llll-py)
+![license](https://img.shields.io/pypi/l/llll-py)
+
 # llll
 
 Python support for lisp-like linked lists (_llll_).
