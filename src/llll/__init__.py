@@ -219,8 +219,8 @@ class llll:
 
         if isinstance(key, str):
             for x in self.__iter__():
-                if x[1][1] == key:
-                    return x[1:]
+                if x[1] == key:
+                    return x[2:]
             return llll()
 
         if isinstance(key, slice):
@@ -265,6 +265,17 @@ class llll:
     def __setitem__(self, key, value) -> None:
         if self.is_atomic():
             raise IndexError("Cannot set items in atomic llll")
+
+        if isinstance(key, str):
+            for i, x in enumerate(self):
+                if x[1] == key:
+                    if isinstance(value, (tuple, list, llll)):
+                        new = llll(key, *value)
+                    else:
+                        new = llll(key, value)
+                    self[i + 1] = new
+                    break
+            return
 
         if isinstance(key, (tuple, list)):
             if len(key) == 1:

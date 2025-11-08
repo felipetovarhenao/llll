@@ -182,6 +182,25 @@ class TestUtilities:
         assert len(l.to_python()) == 3
 
 
+class TestKeys:
+
+    def test_key_access(self):
+        l = llll(["name", "Alice"], ["age", 33], ["parents", "Bob", "Chloe"])
+
+        assert l["name"] == 'Alice'
+        assert l["age"] == 33
+        assert l["parents"].to_python() == ['Bob', "Chloe"]
+
+    def test_key_assign(self):
+        l = llll(["name", "Alice"], ["age", 33], ["parents", "Bob", "Chloe"])
+        l['name'] = "Ada"
+        l['age'] = 40
+        l['parents'] = ["Alice", "John"]
+        assert l["name"] == 'Ada'
+        assert l["age"] == 40
+        assert l["parents"].to_python() == ['Alice', "John"]
+
+
 class TestFileIO:
     """Test file I/O operations."""
 

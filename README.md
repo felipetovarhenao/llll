@@ -42,6 +42,25 @@ l[3, 2]   # 40 (address-based access)
 l[2:3]    # 20 [ 30 40 ]
 ```
 
+### Keys
+
+Access and modify lllls via keys:
+
+```python
+l = llll(["name", "Alice"], ["age", 33], ["parents", "Bob", "Chloe"])
+
+# Access by key
+l["name"]         # "Alice"
+l["age"]          # 33
+l["parents"]      # "Bob" "Chloe"
+
+# Assignment by key
+l['name'] = "John"
+l['age'] = 55
+l['parents'] = ["Geoffrey", "Ada"]
+# [ name John ] [ age 33 ] [parents Geofrrey Ada ]
+```
+
 ### Arithmetic Operations
 
 Element-wise operations with broadcasting:
