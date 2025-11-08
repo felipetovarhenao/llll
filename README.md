@@ -16,8 +16,8 @@ pip3 install llll
 from llll import llll
 
 # Atomic values
-x = llll(42)
-y = llll("hello")
+x = llll(42)      # 42
+y = llll("hello") # hello
 
 # Nested lists
 z = llll(1, 2, [3, 4], 5)  # 1 2 [ 3 4 ] 5
