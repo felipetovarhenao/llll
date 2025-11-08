@@ -106,6 +106,11 @@ class llll:
         if not isinstance(other, llll):
             other = llll(other)
 
+        def _check_wrapper(x: llll):
+            if isinstance(x, llll) and (not x.is_atomic()) and len(x._items) == 1 and x._items[0].is_atomic():
+                return x._items[0]._value
+            return x
+
         if self.is_atomic() and other.is_atomic():
             if op_name == 'truediv' and isinstance(self._value, int) and isinstance(other._value, int):
                 result = Fraction(self._value, other._value)
@@ -114,36 +119,47 @@ class llll:
             return llll(result)
 
         if self.is_atomic() and not other.is_atomic():
-            if len(other._items) == 1 and other._items[0].is_atomic():
-                return self._arithmetic_op(other._items[0], op, op_name)
             new_items = []
             for item in other._items:
-                result = self._arithmetic_op(item, op, op_name)
-                new_items.append(result)
+                res = self._arithmetic_op(item, op, op_name)
+                new_items.append(_check_wrapper(res))
             return llll(*new_items)
 
         if not self.is_atomic() and other.is_atomic():
             new_items = []
             for item in self._items:
-                result = item._arithmetic_op(other, op, op_name)
-                new_items.append(result)
+                res = item._arithmetic_op(other, op, op_name)
+                new_items.append(_check_wrapper(res))
             return llll(*new_items)
 
-        if len(other._items) == 1 and other._items[0].is_atomic():
-            return self._arithmetic_op(other._items[0], op, op_name)
+        len_self = len(self._items)
+        len_other = len(other._items)
 
-        if len(self._items) == 1 and self._items[0].is_atomic():
-            return self._items[0]._arithmetic_op(other, op, op_name)
+        if len_self == 1 and len_other > 1:
+            new_items = []
+            a = self._items[0]
+            for b in other._items:
+                res = a._arithmetic_op(b, op, op_name)
+                new_items.append(_check_wrapper(res))
+            return llll(*new_items)
 
-        if len(self._items) != len(other._items):
-            raise ValueError(
-                f"Cannot perform element-wise operation on lllls of different lengths: {len(self._items)} vs {len(other._items)}")
+        if len_other == 1 and len_self > 1:
+            new_items = []
+            b = other._items[0]
+            for a in self._items:
+                res = a._arithmetic_op(b, op, op_name)
+                new_items.append(_check_wrapper(res))
+            return llll(*new_items)
 
-        new_items = []
-        for a, b in zip(self._items, other._items):
-            result = a._arithmetic_op(b, op, op_name)
-            new_items.append(result)
-        return llll(*new_items)
+        if len_self == len_other:
+            new_items = []
+            for a, b in zip(self._items, other._items):
+                res = a._arithmetic_op(b, op, op_name)
+                new_items.append(_check_wrapper(res))
+            return llll(*new_items)
+
+        raise ValueError(
+            f"Cannot perform element-wise operation on lllls of different lengths: {len_self} vs {len_other}")
 
     def __add__(self, other) -> Self:
         return self._arithmetic_op(other, lambda a, b: a + b, 'add')
