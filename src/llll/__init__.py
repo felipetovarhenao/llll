@@ -431,7 +431,8 @@ class Parser:
     def _convert_to_float(self, low: int, high: int):
         return struct.unpack('<d', struct.pack('<II', low, high))[0]
 
-    def _convert_from_float(self, value: float):
+    @classmethod
+    def _convert_from_float(cls, value: float):
         low, high = struct.unpack('<II', struct.pack('<d', value))
         return low, high
 
