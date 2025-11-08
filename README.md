@@ -134,4 +134,4 @@ l.as_int()  # 1 [ 2 3 ] 4 5
 
 ## License
 
-MIT License - Copyright (c) 2025 Felipe Tovar-Henao
+MIT License - Copyright © 2025 Felipe Tovar-Henao
