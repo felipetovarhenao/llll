@@ -1,5 +1,5 @@
 ![version](https://img.shields.io/pypi/v/llll-py)
-![last_commit](https://img.shields.io/github/last-commit/felipetovarhenao/llll-py)
+![last_commit](https://img.shields.io/github/last-commit/felipetovarhenao/llll)
 ![license](https://img.shields.io/pypi/l/llll-py)
 
 # llll
