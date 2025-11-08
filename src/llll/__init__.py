@@ -435,6 +435,7 @@ class Parser:
         low, high = struct.unpack('<II', struct.pack('<d', value))
         return low, high
 
+    @classmethod
     def serialize(cls, l: llll, file: str):
         data = []
 
