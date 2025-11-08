@@ -248,7 +248,8 @@ class llll:
         if not (0 <= idx < len(self._items)):
             raise IndexError(f"Index {key} out of range")
 
-        return self._items[idx]
+        item = self._items[idx]
+        return item.value() if item.is_atomic() else item
 
     def _get_by_address(self, address) -> Self:
         if not address:
