@@ -2,6 +2,15 @@
 
 Python support for lisp-like linked lists (_llll_).
 
+## Key Features
+
+- **Read/write operations** in both text (`.txt`) and native (`.llll`) formats.
+- **1-based indexing** following the [bach](https://bachproject.net) library and [_bell_](https://felipe-tovar-henao.com/bell-tutorials) language conventions.
+- **Element-wise arithmetic** with automatic broadcasting.
+- **Flexible mapping** with depth control.
+- **Address and key syntax support** for data access and assignment.
+- **Fraction support** for exact rational arithmetic.
+
 ## Installation
 
 ```bash
@@ -123,15 +132,6 @@ l.as_float()      # 1.0 [ 2.5 3.0 ] 4.0 5.0
 l.as_int()        # 1 [ 2 3 ] 4 5
 ```
 
-## Key Features
-
-- **1-based indexing** following Max/MSP bach library conventions
-- **Element-wise arithmetic** with automatic broadcasting
-- **Flexible mapping** with depth control
-- **Address-based access** using tuple notation
-- **Fraction support** for exact rational arithmetic
-- **File persistence** in both text and binary formats
-
 ## License
 
-MIT License - Copyright © 2025 Felipe Tovar-Henao
+[MIT License](LICENSE) - Copyright © 2025 Felipe Tovar-Henao
