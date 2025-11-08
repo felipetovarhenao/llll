@@ -411,7 +411,7 @@ class llll:
             with open(file, 'w') as f:
                 f.write(self.__str__())
         else:
-            raise SystemError('.llll files are not yet supported.')
+            Parser.serialize(self, file)
 
 
 class Parser:
@@ -434,6 +434,37 @@ class Parser:
     def _convert_from_float(self, value: float):
         low, high = struct.unpack('<II', struct.pack('<d', value))
         return low, high
+
+    def serialize(cls, l: llll, file: str):
+        data = []
+
+        def traverse(x):
+            for item in x:
+                if item.is_atomic():
+                    value = item.value()
+                    if isinstance(value, float):
+                        low, high = cls._convert_from_float(value)
+                        data.extend(
+                            ["_x_x_x_x_bach_float64_x_x_x_x_", low, high])
+                    else:
+                        data.append(value)
+                else:
+                    data.append('[')
+                    traverse(item)
+                    data.append(']')
+        traverse(l)
+        data_len = len(data)
+        num_chunks = data_len // 4096 + 1
+        chunk_size = 4096
+        native_data = {}
+        for i in range(num_chunks):
+            st = i * chunk_size
+            end = st + chunk_size
+            key = f"data_{i:010}"
+            native_data[key] = data[st:end]
+        native_data['data_count'] = [num_chunks]
+        with open(file, 'w') as f:
+            json.dump(obj=native_data, fp=f)
 
     def _parse_native(self, data: str):
 
