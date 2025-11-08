@@ -8,6 +8,8 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = []
+license = "MIT"
+license-files = ["LICENSE"]
 
 [tool.poetry]
 packages = [{ include = "llll", from = "src" }]
