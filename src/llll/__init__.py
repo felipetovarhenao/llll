@@ -2,6 +2,7 @@ import os
 import json
 import struct
 import re
+from typing import Self, Iterator, Any
 from fractions import Fraction
 
 
@@ -13,7 +14,7 @@ class llll:
         for item in items:
             self._items.append(self._to_llll(item))
 
-    def __eq__(self, other):
+    def __eq__(self, other) -> bool:
         if not isinstance(other, llll):
             other = llll(other)
 
@@ -28,10 +29,10 @@ class llll:
 
         return all(a == b for a, b in zip(self._items, other._items))
 
-    def __ne__(self, other):
+    def __ne__(self, other) -> bool:
         return not self.__eq__(other)
 
-    def __lt__(self, other):
+    def __lt__(self, other) -> bool:
         if not isinstance(other, llll):
             other = llll(other)
 
@@ -46,7 +47,7 @@ class llll:
 
         return all(a < b for a, b in zip(self._items, other._items))
 
-    def __le__(self, other):
+    def __le__(self, other) -> bool:
         if not isinstance(other, llll):
             other = llll(other)
 
@@ -61,7 +62,7 @@ class llll:
 
         return all(a <= b for a, b in zip(self._items, other._items))
 
-    def __gt__(self, other):
+    def __gt__(self, other) -> bool:
         if not isinstance(other, llll):
             other = llll(other)
 
@@ -76,7 +77,7 @@ class llll:
 
         return all(a > b for a, b in zip(self._items, other._items))
 
-    def __ge__(self, other):
+    def __ge__(self, other) -> bool:
         if not isinstance(other, llll):
             other = llll(other)
 
@@ -91,7 +92,7 @@ class llll:
 
         return all(a >= b for a, b in zip(self._items, other._items))
 
-    def _arithmetic_op(self, other, op, op_name):
+    def _arithmetic_op(self, other, op, op_name) -> Self:
         if not isinstance(other, llll):
             other = llll(other)
 
@@ -134,56 +135,56 @@ class llll:
             new_items.append(result)
         return llll(*new_items)
 
-    def __add__(self, other):
+    def __add__(self, other) -> Self:
         return self._arithmetic_op(other, lambda a, b: a + b, 'add')
 
-    def __radd__(self, other):
+    def __radd__(self, other) -> Self:
         return self.__add__(other)
 
-    def __sub__(self, other):
+    def __sub__(self, other) -> Self:
         return self._arithmetic_op(other, lambda a, b: a - b, 'sub')
 
-    def __rsub__(self, other):
+    def __rsub__(self, other) -> Self:
         if not isinstance(other, llll):
             other = llll(other)
         return other.__sub__(self)
 
-    def __mul__(self, other):
+    def __mul__(self, other) -> Self:
         return self._arithmetic_op(other, lambda a, b: a * b, 'mul')
 
-    def __rmul__(self, other):
+    def __rmul__(self, other) -> Self:
         return self.__mul__(other)
 
-    def __truediv__(self, other):
+    def __truediv__(self, other) -> Self:
         return self._arithmetic_op(other, lambda a, b: a / b, 'truediv')
 
-    def __rtruediv__(self, other):
+    def __rtruediv__(self, other) -> Self:
         if not isinstance(other, llll):
             other = llll(other)
         return other.__truediv__(self)
 
-    def __pow__(self, other):
+    def __pow__(self, other) -> Self:
         return self._arithmetic_op(other, lambda a, b: a ** b, 'pow')
 
-    def __rpow__(self, other):
+    def __rpow__(self, other) -> Self:
         if not isinstance(other, llll):
             other = llll(other)
         return other.__pow__(self)
 
-    def __mod__(self, other):
+    def __mod__(self, other) -> Self:
         return self._arithmetic_op(other, lambda a, b: a % b, 'mod')
 
-    def __rmod__(self, other):
+    def __rmod__(self, other) -> Self:
         if not isinstance(other, llll):
             other = llll(other)
         return other.__mod__(self)
 
-    def __len__(self):
+    def __len__(self) -> int:
         if self.is_atomic():
             return 1
         return len(self._items)
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> Self:
         if key == 0:
             return llll()
 
@@ -223,7 +224,7 @@ class llll:
 
         return self._items[idx]
 
-    def _get_by_address(self, address):
+    def _get_by_address(self, address) -> Self:
         if not address:
             return self
 
@@ -234,7 +235,7 @@ class llll:
             return element._get_by_address(rest)
         return element
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key, value) -> None:
         if self.is_atomic():
             raise IndexError("Cannot set items in atomic llll")
 
@@ -254,28 +255,28 @@ class llll:
 
         self._items[idx] = self._to_llll(value)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator:
         if self.is_atomic():
             return iter([])
         return iter(self._items)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         if self.is_atomic():
             return repr(self._value)
 
         items_repr = ' '.join(repr(item) for item in self._items)
         return f"[ {items_repr} ]"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self._to_str(top_level=True, indent=-1, min_depth=2)
 
-    def _set_by_address(self, address, value):
+    def _set_by_address(self, address, value) -> None:
         if len(address) == 1:
             self[address[0]] = value
         else:
             self[address[0]]._set_by_address(address[1:], value)
 
-    def _to_llll(self, item):
+    def _to_llll(self, item) -> Self:
         if isinstance(item, llll):
             return item
         elif isinstance(item, (list, tuple)):
@@ -283,43 +284,43 @@ class llll:
         else:
             return llll.__new__(llll)._init_atomic(item)
 
-    def wrap(self, n: int = 1):
+    def wrap(self, n: int = 1) -> Self:
         for _ in range(n):
             self._items = llll(self._items)
         return self
 
-    def _init_atomic(self, value):
+    def _init_atomic(self, value) -> Self:
         self._items = None
         self._value = value
         return self
 
-    def is_atomic(self):
+    def is_atomic(self) -> bool:
         return self._items is None
 
-    def value(self):
+    def value(self) -> Any:
         if not self.is_atomic():
             raise ValueError("Cannot get value of non-atomic llll")
         return self._value
 
-    def append(self, item):
+    def append(self, item) -> None:
         if self.is_atomic():
             raise ValueError("Cannot append to atomic llll")
         self._items.append(self._to_llll(item))
 
-    def extend(self, items):
+    def extend(self, items) -> None:
         if self.is_atomic():
             raise ValueError("Cannot extend atomic llll")
         for item in items:
             self.append(item)
 
-    def depth(self):
+    def depth(self) -> int:
         def _depth(x: llll):
             if x.__len__() == 0 or x.is_atomic():
                 return 0
             return 1 + max((_depth(item) for item in x._items), default=0)
         return max(_depth(self), 1)
 
-    def _to_str(self, top_level=False, indent=0, min_depth=2):
+    def _to_str(self, top_level=False, indent=0, min_depth=2) -> str:
         if self.is_atomic():
             return str(self._value)
 
@@ -351,19 +352,19 @@ class llll:
                 return items_str
             return f'[ {items_str} ]'
 
-    def to_python(self):
+    def to_python(self) -> Any:
         if self.is_atomic():
             return self._value
         return [item.to_python() for item in self._items]
 
     @classmethod
-    def from_python(cls, obj):
+    def from_python(cls, obj) -> Self:
         if isinstance(obj, (list, tuple)):
             return cls(*obj)
         else:
             return cls(obj)
 
-    def map(self, func, mindepth=1, maxdepth=float('inf'), _current_depth=1, _address=()):
+    def map(self, func, mindepth=1, maxdepth=float('inf'), _current_depth=1, _address=()) -> Self:
         if self.is_atomic():
             if mindepth <= _current_depth <= maxdepth:
                 result = func(self._value, _address)
@@ -399,45 +400,104 @@ class llll:
         return llll(*new_items)
 
     @classmethod
-    def from_file(cls, file: str):
-        p = Parser(file=file)
-        return p._data
+    def read(cls, file: str) -> Self:
+        return Parser.deserialize(file)
 
-    def to_file(self, file: str):
-        ext = os.path.splitext(file)[1]
-        if ext not in ['.txt', '.llll']:
-            raise ValueError(f'Invalid extension: {ext}')
-        if ext == '.txt':
-            with open(file, 'w') as f:
-                f.write(self.__str__())
-        else:
-            Parser.serialize(self, file)
+    def write(self, file: str) -> None:
+        Parser.serialize(l=self, file=file)
 
 
 class Parser:
-    def __init__(self, file: str):
+
+    FLOAT64_STR = "_x_x_x_x_bach_float64_x_x_x_x_"
+
+    @classmethod
+    def deserialize(cls, file: str) -> llll:
         ext = os.path.splitext(file)[1]
         if ext not in ['.txt', '.llll']:
             raise ImportError(
                 f'Invalid extension: {ext}\nFile must be .txt or .llll')
         with open(file, 'r') as f:
-            data = f.read()
+            raw_data = f.read()
 
         if ext == '.llll':
-            self._data = self._parse_native(data)
+            return cls.__parse_native(raw_data)
         else:
-            raise TypeError('.txt not supported yet.')
-
-    def _convert_to_float(self, low: int, high: int):
-        return struct.unpack('<d', struct.pack('<II', low, high))[0]
+            return cls.__parse_text(raw_data)
 
     @classmethod
-    def _convert_from_float(cls, value: float):
-        low, high = struct.unpack('<II', struct.pack('<d', value))
-        return low, high
+    def __interpret_token(cls, token: str) -> str | int | float | Fraction:
+        if (token.startswith("'") and token.endswith("'")) or \
+                (token.startswith('"') and token.endswith('"')):
+            return token[1:-1]
+
+        # Check for backtick-prefixed symbol
+        if token.startswith('`'):
+            return token[1:]
+
+        if re.match(r'^[+-]?\d+/\d+$', token):
+            rat = token.split('/')
+            return Fraction(int(rat[0]), int(rat[1]))
+
+        # Check integer
+        if re.match(r'^-?\d+$', token):
+            return int(token)
+
+        # Check float
+        if re.match(r'^(-?\d*\.\d+|-?Inf)$', token):
+            return float(token)
+
+        return token
 
     @classmethod
-    def serialize(cls, l: llll, file: str):
+    def __parse_text(cls, data: str) -> llll:
+        tokens = cls.__tokenize(data)
+        return llll(cls.__parse_tokens(tokens))
+
+    @classmethod
+    def __tokenize(cls, content: str) -> list:
+        token_pattern = r"""
+            '[^']*'                    |  # Single quoted strings
+            "[^"]*"                    |  # Double quoted strings
+            `\S+                       |  # Backtick-prefixed symbols without spaces
+            [\[\]]                     |  # Brackets for nesting
+            [^\s\[\]'"`]+                 # Unquoted symbols, integers, and floats
+        """
+
+        return re.findall(token_pattern, content, re.VERBOSE)
+
+    @classmethod
+    def __parse_tokens(cls, tokens) -> list:
+        stack = [[]]
+
+        for token in tokens:
+            if token == '[':
+                new_list = []
+                stack[-1].append(new_list)
+                stack.append(new_list)
+            elif token == ']':
+                if len(stack) == 1:
+                    raise ValueError("Unbalanced brackets detected.")
+                stack.pop()
+            else:
+                parsed_token = cls.__interpret_token(token)
+                stack[-1].append(parsed_token)
+
+        if len(stack) != 1:
+            raise ValueError("Unbalanced brackets detected at end of parsing.")
+
+        return stack[0]
+
+    @classmethod
+    def serialize(cls, l: llll, file: str) -> None:
+        ext = os.path.splitext(file)[1]
+        if ext not in ['.txt', '.llll']:
+            raise ValueError(f'Invalid extension: {ext}')
+        if ext == '.txt':
+            with open(file, 'w') as f:
+                f.write(l.__str__())
+            return
+
         data = []
 
         def traverse(x):
@@ -445,9 +505,11 @@ class Parser:
                 if item.is_atomic():
                     value = item.value()
                     if isinstance(value, float):
-                        low, high = cls._convert_from_float(value)
+                        low, high = cls.encode_float(value)
                         data.extend(
-                            ["_x_x_x_x_bach_float64_x_x_x_x_", low, high])
+                            [cls.FLOAT64_STR, low, high])
+                    elif isinstance(value, Fraction):
+                        data.append(str(value))
                     else:
                         data.append(value)
                 else:
@@ -456,8 +518,8 @@ class Parser:
                     data.append(']')
         traverse(l)
         data_len = len(data)
-        num_chunks = data_len // 4096 + 1
         chunk_size = 4096
+        num_chunks = data_len // chunk_size + 1
         native_data = {}
         for i in range(num_chunks):
             st = i * chunk_size
@@ -468,7 +530,8 @@ class Parser:
         with open(file, 'w') as f:
             json.dump(obj=native_data, fp=f)
 
-    def _parse_native(self, data: str):
+    @classmethod
+    def __parse_native(cls, data: str) -> llll:
 
         obj = json.loads(s=data)
         data_count = obj['data_count'][0]
@@ -487,9 +550,9 @@ class Parser:
                 elif item == '[':
                     l.append(consume())
                 else:
-                    if item == "_x_x_x_x_bach_float64_x_x_x_x_":
+                    if item == cls.FLOAT64_STR:
                         low, high = (next(items) for _ in range(2))
-                        item = self._convert_to_float(low=low, high=high)
+                        item = cls.decode_float(low=low, high=high)
                     elif isinstance(item, str):
                         pat = re.compile(pattern=r"[+-]?\d+/\d+")
                         match = pat.search(item)
@@ -500,3 +563,15 @@ class Parser:
                     l.append(item)
 
         return consume()
+
+    @staticmethod
+    def decode_float(low: int, high: int) -> float:
+        return struct.unpack('<d', struct.pack('<II', low, high))[0]
+
+    @staticmethod
+    def encode_float(value: float) -> tuple[int, int]:
+        low, high = struct.unpack('<II', struct.pack('<d', value))
+        return low, high
+
+
+__all__ = ["llll"]
