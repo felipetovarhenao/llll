@@ -1,5 +1,5 @@
 [project]
-name = "llll"
+name = "llll-py"
 version = "0.1.0"
 description = "A basic package for parsing lisp-like linked lists in Python."
 authors = [

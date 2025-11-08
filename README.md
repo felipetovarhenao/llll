@@ -14,7 +14,7 @@ Python support for lisp-like linked lists (_llll_).
 ## Installation
 
 ```bash
-pip3 install llll
+pip3 install llll-py
 ```
 
 ## Basic Usage
