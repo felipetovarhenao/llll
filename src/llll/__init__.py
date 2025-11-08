@@ -28,10 +28,10 @@ class llll:
         if not isinstance(other, llll):
             other = llll(other)
 
-        if self.is_atomic() and other.is_atomic():
+        if self._is_atom() and other._is_atom():
             return self._value == other._value
 
-        if self.is_atomic() or other.is_atomic():
+        if self._is_atom() or other._is_atom():
             return False
 
         if len(self._items) != len(other._items):
@@ -46,10 +46,10 @@ class llll:
         if not isinstance(other, llll):
             other = llll(other)
 
-        if self.is_atomic() and other.is_atomic():
+        if self._is_atom() and other._is_atom():
             return self._value < other._value
 
-        if self.is_atomic() or other.is_atomic():
+        if self._is_atom() or other._is_atom():
             return False
 
         if len(self._items) != len(other._items):
@@ -61,10 +61,10 @@ class llll:
         if not isinstance(other, llll):
             other = llll(other)
 
-        if self.is_atomic() and other.is_atomic():
+        if self._is_atom() and other._is_atom():
             return self._value <= other._value
 
-        if self.is_atomic() or other.is_atomic():
+        if self._is_atom() or other._is_atom():
             return False
 
         if len(self._items) != len(other._items):
@@ -76,10 +76,10 @@ class llll:
         if not isinstance(other, llll):
             other = llll(other)
 
-        if self.is_atomic() and other.is_atomic():
+        if self._is_atom() and other._is_atom():
             return self._value > other._value
 
-        if self.is_atomic() or other.is_atomic():
+        if self._is_atom() or other._is_atom():
             return False
 
         if len(self._items) != len(other._items):
@@ -91,10 +91,10 @@ class llll:
         if not isinstance(other, llll):
             other = llll(other)
 
-        if self.is_atomic() and other.is_atomic():
+        if self._is_atom() and other._is_atom():
             return self._value >= other._value
 
-        if self.is_atomic() or other.is_atomic():
+        if self._is_atom() or other._is_atom():
             return False
 
         if len(self._items) != len(other._items):
@@ -107,25 +107,25 @@ class llll:
             other = llll(other)
 
         def _check_wrapper(x: llll):
-            if isinstance(x, llll) and (not x.is_atomic()) and len(x._items) == 1 and x._items[0].is_atomic():
+            if isinstance(x, llll) and (not x._is_atom()) and len(x._items) == 1 and x._items[0]._is_atom():
                 return x._items[0]._value
             return x
 
-        if self.is_atomic() and other.is_atomic():
+        if self._is_atom() and other._is_atom():
             if op_name == 'truediv' and isinstance(self._value, int) and isinstance(other._value, int):
                 result = Fraction(self._value, other._value)
             else:
                 result = op(self._value, other._value)
             return llll(result)
 
-        if self.is_atomic() and not other.is_atomic():
+        if self._is_atom() and not other._is_atom():
             new_items = []
             for item in other._items:
                 res = self._arithmetic_op(item, op, op_name)
                 new_items.append(_check_wrapper(res))
             return llll(*new_items)
 
-        if not self.is_atomic() and other.is_atomic():
+        if not self._is_atom() and other._is_atom():
             new_items = []
             for item in self._items:
                 res = item._arithmetic_op(other, op, op_name)
@@ -206,7 +206,7 @@ class llll:
         return other.__mod__(self)
 
     def __len__(self) -> int:
-        if self.is_atomic():
+        if self._is_atom():
             return 1
         return len(self._items)
 
@@ -214,7 +214,7 @@ class llll:
         if key == 0:
             return llll()
 
-        if self.is_atomic():
+        if self._is_atom():
             return self.value()
 
         if isinstance(key, str):
@@ -249,7 +249,7 @@ class llll:
             raise IndexError(f"Index {key} out of range")
 
         item = self._items[idx]
-        return item.value() if item.is_atomic() else item
+        return item.value() if item._is_atom() else item
 
     def _get_by_address(self, address) -> Self:
         if not address:
@@ -263,7 +263,7 @@ class llll:
         return element
 
     def __setitem__(self, key, value) -> None:
-        if self.is_atomic():
+        if self._is_atom():
             raise IndexError("Cannot set items in atomic llll")
 
         if isinstance(key, str):
@@ -294,12 +294,12 @@ class llll:
         self._items[idx] = self._to_llll(value)
 
     def __iter__(self) -> Iterator:
-        if self.is_atomic():
+        if self._is_atom():
             return iter([])
         return iter(self._items)
 
     def __repr__(self) -> str:
-        if self.is_atomic():
+        if self._is_atom():
             return repr(self._value)
 
         items_repr = ' '.join(repr(item) for item in self._items)
@@ -343,34 +343,34 @@ class llll:
     def as_rat(self):
         return self.map(lambda x, addr: Fraction.from_float(x))
 
-    def is_atomic(self) -> bool:
+    def _is_atom(self) -> bool:
         return self._items is None
 
     def value(self) -> Any:
-        if not self.is_atomic():
+        if not self._is_atom():
             raise ValueError("Cannot get value of non-atomic llll")
         return self._value
 
     def append(self, item) -> None:
-        if self.is_atomic():
+        if self._is_atom():
             raise ValueError("Cannot append to atomic llll")
         self._items.append(self._to_llll(item))
 
     def extend(self, items) -> None:
-        if self.is_atomic():
+        if self._is_atom():
             raise ValueError("Cannot extend atomic llll")
         for item in items:
             self.append(item)
 
     def depth(self) -> int:
         def _depth(x: llll):
-            if x.__len__() == 0 or x.is_atomic():
+            if x.__len__() == 0 or x._is_atom():
                 return 0
             return 1 + max((_depth(item) for item in x._items), default=0)
         return max(_depth(self), 1)
 
     def _to_str(self, top_level=False, indent=0, min_depth=2) -> str:
-        if self.is_atomic():
+        if self._is_atom():
             return str(self._value)
 
         if self.__len__() == 0:
@@ -402,7 +402,7 @@ class llll:
             return f'[ {items_str} ]'
 
     def to_python(self) -> Any:
-        if self.is_atomic():
+        if self._is_atom():
             return self._value
         return [item.to_python() for item in self._items]
 
@@ -414,7 +414,7 @@ class llll:
             return cls(obj)
 
     def map(self, func, mindepth=1, maxdepth=float('inf'), _current_depth=1, _address=()) -> Self:
-        if self.is_atomic():
+        if self._is_atom():
             if mindepth <= _current_depth <= maxdepth:
                 result = func(self._value, _address)
                 return llll(result)
@@ -427,7 +427,7 @@ class llll:
         for idx, item in enumerate(self._items):
             current_address = _address + (idx + 1,)
 
-            if item.is_atomic():
+            if item._is_atom():
                 if mindepth <= _current_depth <= maxdepth:
                     result = func(item._value, current_address)
                     new_items.append(result)
@@ -551,7 +551,7 @@ class Parser:
 
         def traverse(x):
             for item in x:
-                if item.is_atomic():
+                if item._is_atom():
                     value = item.value()
                     if isinstance(value, float):
                         low, high = cls.encode_float(value)

@@ -150,15 +150,15 @@ class TestMapping:
 class TestUtilities:
     """Test utility methods."""
 
-    def test_is_atomic_true(self):
-        """Test is_atomic() returns True for single values."""
+    def test_is_atom_true(self):
+        """Test _is_atom() returns True for single values."""
         atomic = llll(42)
-        assert not atomic.is_atomic()
+        assert not atomic._is_atom()
 
-    def test_is_atomic_false(self):
-        """Test is_atomic() returns False for lists."""
+    def test_is_atom_false(self):
+        """Test _is_atom() returns False for lists."""
         nested = llll(1, [2, 3])
-        assert not nested.is_atomic()
+        assert not nested._is_atom()
 
     def test_depth_simple(self):
         """Test depth() on simple nested structure."""
