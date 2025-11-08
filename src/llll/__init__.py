@@ -490,7 +490,7 @@ class Parser:
     @classmethod
     def __parse_text(cls, data: str) -> llll:
         tokens = cls.__tokenize(data)
-        return llll(cls.__parse_tokens(tokens))
+        return llll(*cls.__parse_tokens(tokens))
 
     @classmethod
     def __tokenize(cls, content: str) -> list:

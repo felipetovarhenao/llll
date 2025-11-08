@@ -185,13 +185,13 @@ class TestUtilities:
 class TestFileIO:
     """Test file I/O operations."""
 
-    # def test_write_read_txt(self, tmp_path):
-    #     """Test writing and reading text format."""
-    #     filepath = str(tmp_path / "data.txt")
-    #     a = llll(1, 2, [3, 4])
-    #     a.write(filepath)
-    #     b = llll.read(filepath)
-    #     assert a == b
+    def test_write_read_txt(self, tmp_path):
+        """Test writing and reading text format."""
+        filepath = str(tmp_path / "data.txt")
+        a = llll(1, 2, [3, 4])
+        a.write(filepath)
+        b = llll.read(filepath)
+        assert a == b
 
     def test_write_read_native_format(self, tmp_path):
         """Test writing and reading native .llll format."""
