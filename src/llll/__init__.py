@@ -313,11 +313,11 @@ class llll:
             self.append(item)
 
     def depth(self):
-        if self.__len__() == 0:
-            return 0
-        if self.is_atomic():
-            return 1
-        return 1 + max((item.depth() for item in self._items), default=0)
+        def _depth(x: llll):
+            if x.__len__() == 0 or x.is_atomic():
+                return 0
+            return 1 + max((_depth(item) for item in x._items), default=0)
+        return max(_depth(self), 1)
 
     def _to_str(self, top_level=False, indent=0, min_depth=2):
         if self.is_atomic():
