@@ -118,7 +118,7 @@ class TestMapping:
     def test_map_boolean_comparison(self):
         """Test mapping with boolean comparison (x > 2)."""
         l = llll(1, [2, 3], [[4, 5], 6])
-        result = l.map(lambda x, addr: int(x > 2))
+        result = l.map(func=lambda x, _: int(x > 2))
         assert result[1] == 0
         assert result[2].to_python() == [0, 1]
         assert result[3, 1].to_python() == [1, 1]
@@ -127,15 +127,16 @@ class TestMapping:
     def test_map_with_depth_constraint(self):
         """Test mapping only at specific depth (depth 2)."""
         l = llll(1, [2, 3], [[4, 5], 6])
+        def func(x, _): return x * 10
         result = l.map(
-            lambda x, addr: x * 10,
+            func=func,
             mindepth=2,
             maxdepth=2
         )
-        assert result[1] == 1  # depth 1, unchanged
-        assert result[2].to_python() == [20, 30]  # depth 2, multiplied
-        assert result[3, 1].to_python() == [4, 5]  # depth 3, unchanged
-        assert result[3, 2] == 60  # depth 2, multiplied
+        assert result[1] == 1
+        assert result[2].to_python() == [20, 30]
+        assert result[3, 1].to_python() == [4, 5]
+        assert result[3, 2] == 60
 
     def test_map_receives_address(self):
         """Test that mapping function receives address tuple."""
