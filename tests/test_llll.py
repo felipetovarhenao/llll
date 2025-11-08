@@ -182,6 +182,27 @@ class TestUtilities:
         assert l[-1].to_python() == [4, 5]
         assert len(l.to_python()) == 3
 
+    def test_extend(self):
+        """Test extending elements."""
+        l = llll(1, [2, 3])
+        l.extend([4, 5])
+        assert l[-1] == 5
+        assert len(l.to_python()) == 4
+
+    def test_nested_append(self):
+        """Test appending nested elements."""
+        l = llll(1, [2, 3])
+        l[2].append(4)
+        assert l.to_python() == [1, [2, 3, 4]]
+        assert len(l[2]) == 3
+
+    def test_nested_append(self):
+        """Test extending nested elements."""
+        l = llll(1, [2, 3])
+        l[2].extend([4, 5])
+        assert l.to_python() == [1, [2, 3, 4, 5]]
+        assert len(l[2]) == 4
+
 
 class TestKeys:
 
