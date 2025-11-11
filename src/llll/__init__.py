@@ -1,11 +1,12 @@
 """ 
-author:         Felipe Tovar-Henao
-email:          felipe.tovar@ufl.edu
-date:           2025-11-08
-description:    class definitions for llll and parser objects
-license: MIT
+Author:         Felipe Tovar-Henao
+Email:          felipe.tovar@ufl.edu
+Date:           2025-11-08
+Description:    Class definitions for the `llll` and `Parser` objects. 
+                Note that the `llll` class is not implemented as a true linked-list but rather aims to emulate the basic functionalities of lllls in bell/bach.
+License: MIT
 
-copyright (c) 2025 Felipe Tovar-Henao
+Copyright (c) 2025 Felipe Tovar-Henao
 """
 
 import os
