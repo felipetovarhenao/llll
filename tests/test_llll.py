@@ -222,6 +222,22 @@ class TestKeys:
         assert l["age"] == 40
         assert l["parents"].to_python() == ['Alice', "John"]
 
+    def test_mixed_access(self):
+        l = llll(['foo', ['one', 2, 3], ['two', 5, 6]], [
+                 'bar', ['one', 8, 9], ['two', 11, 12]])
+        a = l['bar', 2, 3]
+        b = l['bar', 'two', 2]
+        assert a == b == 12
+        assert l['foo', 'one'].to_python() == [2, 3]
+
+    def test_mixed_assign(self):
+        l = llll(['foo', ['one', 2, 3], ['two', 5, 6]], [
+                 'bar', ['one', 8, 9], ['two', 11, 12]])
+        l['foo', 1, 2] *= 10
+        l['foo', 'two', 1] *= 100
+        assert l['foo', 1, 2] == 20
+        assert l['foo', 'two', 1] == 500
+
 
 class TestFileIO:
     """Test file I/O operations."""

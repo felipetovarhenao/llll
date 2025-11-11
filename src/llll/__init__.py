@@ -281,7 +281,7 @@ class llll:
             if len(key) == 1:
                 self[key[0]] = value
             else:
-                self[key[0]]._set_by_address(key[1:], value)
+                self._set_by_address(key, value)
             return
 
         idx = key - 1 if key > 0 else key
@@ -292,6 +292,29 @@ class llll:
             raise IndexError(f"Index {key} out of range")
 
         self._items[idx] = self._to_llll(value)
+
+    def _set_by_address(self, address, value) -> None:
+        if len(address) == 1:
+            self[address[0]] = value
+            return
+
+        first, *rest = address
+
+        if isinstance(first, str):
+            for i, x in enumerate(self):
+                if not x._is_atom() and len(x._items) > 0:
+                    first_item = x._items[0]
+                    if first_item._is_atom() and first_item.value() == first:
+                        temp_llll = llll(*[item for item in x._items[1:]])
+                        temp_llll._set_by_address(rest, value)
+                        x._items = [x._items[0]] + temp_llll._items
+                        break
+        else:
+            element = self[first]
+            if len(rest) == 1:
+                element[rest[0]] = value
+            else:
+                element._set_by_address(rest, value)
 
     def __iter__(self) -> Iterator:
         if self._is_atom():
@@ -307,12 +330,6 @@ class llll:
 
     def __str__(self) -> str:
         return self._to_str(top_level=True, indent=-1, min_depth=2)
-
-    def _set_by_address(self, address, value) -> None:
-        if len(address) == 1:
-            self[address[0]] = value
-        else:
-            self[address[0]]._set_by_address(address[1:], value)
 
     def _to_llll(self, item) -> Self:
         if isinstance(item, llll):
