@@ -332,6 +332,38 @@ class llll:
     def __str__(self) -> str:
         return self._to_str(top_level=True, indent=-1, min_depth=2)
 
+    def _to_str(self, top_level=False, indent=0, min_depth=2) -> str:
+        if self._is_atom():
+            return str(self._value)
+
+        if self.__len__() == 0:
+            return 'null'
+
+        use_indented = self.depth() >= min_depth
+
+        if use_indented:
+            indent_str = '  ' * indent
+            next_indent = '  ' * (indent + 1)
+
+            items_str = []
+            for item in self._items:
+                item_repr = item._to_str(
+                    indent=indent + 1, min_depth=min_depth)
+                items_str.append(f'\n{next_indent}{item_repr}')
+
+            items_content = ''.join(items_str)
+
+            if top_level:
+                return items_content.lstrip()
+            return f'[{items_content}\n{indent_str}]'
+        else:
+            items_str = ' '.join(item._to_str(min_depth=min_depth)
+                                 for item in self._items)
+
+            if top_level:
+                return items_str
+            return f'[ {items_str} ]'
+
     def _to_llll(self, item) -> Self:
         if isinstance(item, llll):
             return item
@@ -386,38 +418,6 @@ class llll:
                 return 0
             return 1 + max((_depth(item) for item in x._items), default=0)
         return max(_depth(self), 1)
-
-    def _to_str(self, top_level=False, indent=0, min_depth=2) -> str:
-        if self._is_atom():
-            return str(self._value)
-
-        if self.__len__() == 0:
-            return 'null'
-
-        use_indented = self.depth() >= min_depth
-
-        if use_indented:
-            indent_str = '  ' * indent
-            next_indent = '  ' * (indent + 1)
-
-            items_str = []
-            for item in self._items:
-                item_repr = item._to_str(
-                    indent=indent + 1, min_depth=min_depth)
-                items_str.append(f'\n{next_indent}{item_repr}')
-
-            items_content = ''.join(items_str)
-
-            if top_level:
-                return items_content.lstrip()
-            return f'[{items_content}\n{indent_str}]'
-        else:
-            items_str = ' '.join(item._to_str(min_depth=min_depth)
-                                 for item in self._items)
-
-            if top_level:
-                return items_str
-            return f'[ {items_str} ]'
 
     def to_python(self) -> Any:
         if self._is_atom():
