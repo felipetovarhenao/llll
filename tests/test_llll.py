@@ -268,6 +268,28 @@ class TestFileIO:
         assert a == b
 
 
+class TestNull:
+    """Test expected bahavior with null values"""
+
+    def test_null_lllls(self):
+        x = llll()
+        assert x.to_python() == []
+        assert len(x) == 0
+        for _ in range(4):
+            x.append(llll())
+        assert x.to_python() == []
+        assert len(x) == 0
+        for _ in range(4):
+            x.extend(llll())
+        assert x.to_python() == []
+        assert len(x) == 0
+        x = llll()
+        for _ in range(4):
+            x.append(llll().wrap(1))
+        assert x.to_python() == [[[]], [[]], [[]], [[]]]
+        assert len(x) == 4
+
+
 class TestEdgeCases:
     """Test edge cases and boundary conditions."""
 

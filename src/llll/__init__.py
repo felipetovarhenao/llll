@@ -404,6 +404,8 @@ class llll:
     def append(self, item) -> None:
         if self._is_atom():
             raise ValueError("Cannot append to atomic llll")
+        if isinstance(item, (llll, list, tuple)) and len(item) == 0:
+            return
         self._items.append(self._to_llll(item))
 
     def extend(self, items) -> None:

@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 ### Fixed
 
 - Handle strings correctly for read/write in `.txt` format.
+- Prevent lllls of `null` values in `append`, by checking if `len` is 0.
 
 ### Removed
 
