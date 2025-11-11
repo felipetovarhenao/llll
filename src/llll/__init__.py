@@ -561,6 +561,24 @@ class Parser:
             raise ValueError(f'Invalid extension: {ext}')
         if ext == '.txt':
             with open(file, 'w') as f:
+                def is_num(x):
+                    try:
+                        float(x)
+                        return True
+                    except:
+                        return False
+
+                def _format(x, _):
+                    if isinstance(x, str):
+                        if ' ' in x:
+                            if '"' in x:
+                                x = f"'{x}'"
+                            else:
+                                x = f'"{x}"'
+                        elif is_num(x):
+                            x = f"'{x}'"
+                    return x
+                l = l.map(_format)
                 f.write(l.__str__())
             return
 

@@ -245,14 +245,14 @@ class TestFileIO:
     def test_write_read_txt(self, tmp_path):
         """Test writing and reading text format."""
         filepath = str(tmp_path / "data.txt")
-        a = llll(1, 2, [3, 4])
+        a = llll(1, 2, [2.312, -11/7], ['foo', '12.234', 'tic toc'])
         a.write(filepath)
         b = llll.read(filepath)
         assert a == b
 
     def test_write_read_native_format(self, tmp_path):
         """Test writing and reading native .llll format."""
-        a = llll(1, 2, [3, 4])
+        a = llll(1, 2, [2.312, -11/7], ['foo', '12.234', 'tic toc'])
         filepath = str(tmp_path / "data.llll")
         a.write(filepath)
         b = llll.read(filepath)
