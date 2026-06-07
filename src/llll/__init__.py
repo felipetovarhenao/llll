@@ -12,8 +12,13 @@ Copyright (c) 2025 Felipe Tovar-Henao
 import os
 import json
 import struct
-import re
-from typing import Self, Iterator, Any
+import sys
+
+if sys.version_info >= (3, 11):
+    from typing import Self
+else:
+    from typing_extensions import Self
+from typing import Iterator, Any
 from fractions import Fraction
 
 
