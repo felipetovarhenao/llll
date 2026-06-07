@@ -2,7 +2,9 @@
 name = "llll-py"
 version = "0.1.0"
 description = "A basic package for parsing lisp-like linked lists in Python."
-authors = [{ name = "Felipe Tovar-Henao", email = "pipetovarh@hotmail.com" }]
+authors = [
+	{ name = "Felipe Tovar-Henao", email = 'felipe.tovar.henao@gmail.com' },
+]
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["typing_extensions"]
