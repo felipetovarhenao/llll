@@ -140,3 +140,29 @@ l.as_int()        # 1 [ 2 3 ] 4 5
 ## License
 
 [MIT License](LICENSE) - Copyright © 2025 Felipe Tovar-Henao
+
+## Development setup
+
+Follow these steps if you intend to run and/or build **llll-py** from source.
+
+1. Install [Miniconda](https://www.anaconda.com/download/success?reg=skipped).
+2. In the terminal, run:
+
+```sh
+conda env create -f environment.yml
+conda activate llll
+python -m pip install hatch
+```
+
+To build or publish, run:
+
+```sh
+hatch build
+hatch publish
+```
+
+To run unit tests run:
+
+```sh
+python -m unittest tests/*
+```
