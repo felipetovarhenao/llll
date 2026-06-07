@@ -151,7 +151,6 @@ Follow these steps if you intend to run and/or build **llll-py** from source.
 ```sh
 conda env create -f environment.yml
 conda activate llll
-python -m pip install hatch
 ```
 
 To build or publish, run:
@@ -164,5 +163,5 @@ hatch publish
 To run unit tests run:
 
 ```sh
-python -m unittest tests/*
+pytest tests
 ```
