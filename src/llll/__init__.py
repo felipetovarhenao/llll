@@ -428,13 +428,22 @@ class llll:
 
     def to_python(self) -> Any:
         if self._is_atom():
+            if isinstance(self._value, bool):
+                return int(self._value)
             return self._value
         return [item.to_python() for item in self._items]
 
     @classmethod
-    def from_python(cls, obj) -> Self:
+    def from_python(cls, obj: object) -> Self:
         if isinstance(obj, (list, tuple)):
             return cls(*obj)
+        elif isinstance(obj, dict):
+            l = llll()
+            for k, v in obj.items():
+                k = llll(k)
+                k.extend(cls.from_python(v))
+                l.append(k)
+            return l
         else:
             return cls(obj)
 

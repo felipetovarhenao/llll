@@ -23,12 +23,29 @@ class TestCreation:
         assert z[3].to_python() == [3, 4]
         assert z[4] == 5
 
-    def test_from_python(self):
+    def test_from_python_list(self):
         """Test creating llll from Python list."""
         data = llll.from_python([1, [2, 3], 4])
         assert data[1] == 1
         assert data[2].to_python() == [2, 3]
         assert data[3] == 4
+
+    def test_from_python_dict(self):
+        """Test creating llll from Python dict."""
+        data = llll.from_python({
+            'categorical': 1,
+            'some': [1, 2, 3],
+            'thing': {
+                'foo': 1,
+                'bar': False
+            },
+            'symbol': ['hello']
+        })
+
+        assert data['categorical'] == 1
+        assert data['some'].to_python() == [1, 2, 3]
+        assert data['thing']['bar'] == 0
+        assert data['symbol'] == 'hello'
 
 
 class TestIndexing:
