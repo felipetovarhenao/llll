@@ -13,7 +13,7 @@ import os
 import json
 import struct
 import sys
-
+import re
 if sys.version_info >= (3, 11):
     from typing import Self
 else:
