@@ -108,7 +108,7 @@ class llll:
 
         return all(a >= b for a, b in zip(self._items, other._items))
 
-    def _arithmetic_op(self, other, op, op_name) -> Self:
+    def _binary_op(self, other, op, op_name) -> Self:
         if not isinstance(other, llll):
             other = llll(other)
 
@@ -127,14 +127,14 @@ class llll:
         if self._is_atom() and not other._is_atom():
             new_items = []
             for item in other._items:
-                res = self._arithmetic_op(item, op, op_name)
+                res = self._binary_op(item, op, op_name)
                 new_items.append(_check_wrapper(res))
             return llll(*new_items)
 
         if not self._is_atom() and other._is_atom():
             new_items = []
             for item in self._items:
-                res = item._arithmetic_op(other, op, op_name)
+                res = item._binary_op(other, op, op_name)
                 new_items.append(_check_wrapper(res))
             return llll(*new_items)
 
@@ -145,7 +145,7 @@ class llll:
             new_items = []
             a = self._items[0]
             for b in other._items:
-                res = a._arithmetic_op(b, op, op_name)
+                res = a._binary_op(b, op, op_name)
                 new_items.append(_check_wrapper(res))
             return llll(*new_items)
 
@@ -153,14 +153,14 @@ class llll:
             new_items = []
             b = other._items[0]
             for a in self._items:
-                res = a._arithmetic_op(b, op, op_name)
+                res = a._binary_op(b, op, op_name)
                 new_items.append(_check_wrapper(res))
             return llll(*new_items)
 
         if len_self == len_other:
             new_items = []
             for a, b in zip(self._items, other._items):
-                res = a._arithmetic_op(b, op, op_name)
+                res = a._binary_op(b, op, op_name)
                 new_items.append(_check_wrapper(res))
             return llll(*new_items)
 
@@ -168,13 +168,13 @@ class llll:
             f"Cannot perform element-wise operation on lllls of different lengths: {len_self} vs {len_other}")
 
     def __add__(self, other) -> Self:
-        return self._arithmetic_op(other, lambda a, b: a + b, 'add')
+        return self._binary_op(other, lambda a, b: a + b, 'add')
 
     def __radd__(self, other) -> Self:
         return self.__add__(other)
 
     def __sub__(self, other) -> Self:
-        return self._arithmetic_op(other, lambda a, b: a - b, 'sub')
+        return self._binary_op(other, lambda a, b: a - b, 'sub')
 
     def __rsub__(self, other) -> Self:
         if not isinstance(other, llll):
@@ -182,13 +182,13 @@ class llll:
         return other.__sub__(self)
 
     def __mul__(self, other) -> Self:
-        return self._arithmetic_op(other, lambda a, b: a * b, 'mul')
+        return self._binary_op(other, lambda a, b: a * b, 'mul')
 
     def __rmul__(self, other) -> Self:
         return self.__mul__(other)
 
     def __truediv__(self, other) -> Self:
-        return self._arithmetic_op(other, lambda a, b: a / b, 'truediv')
+        return self._binary_op(other, lambda a, b: a / b, 'truediv')
 
     def __rtruediv__(self, other) -> Self:
         if not isinstance(other, llll):
@@ -196,7 +196,7 @@ class llll:
         return other.__truediv__(self)
 
     def __pow__(self, other) -> Self:
-        return self._arithmetic_op(other, lambda a, b: a ** b, 'pow')
+        return self._binary_op(other, lambda a, b: a ** b, 'pow')
 
     def __rpow__(self, other) -> Self:
         if not isinstance(other, llll):
@@ -204,7 +204,7 @@ class llll:
         return other.__pow__(self)
 
     def __mod__(self, other) -> Self:
-        return self._arithmetic_op(other, lambda a, b: a % b, 'mod')
+        return self._binary_op(other, lambda a, b: a % b, 'mod')
 
     def __rmod__(self, other) -> Self:
         if not isinstance(other, llll):
