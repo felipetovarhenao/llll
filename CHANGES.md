@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ### Added
 
+- Backward support for python 3.10.
 - `llll` now supports mixed key/address syntax for access and assignment.
 
 ### Changed
