@@ -326,3 +326,10 @@ class TestEdgeCases:
         l = llll([[[1, 2]]])
         assert l[1, 1, 1, 1] == 1
         assert l[1, 1, 1, 2] == 2
+
+    def test_chained_key_assignment(self):
+        l = llll()
+        l.append(['foo', ['bar']])
+        l['foo']['bar'].append(1)
+        assert l['foo']['bar'] == 1
+        assert l.depth() == 3

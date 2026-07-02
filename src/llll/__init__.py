@@ -226,7 +226,7 @@ class llll:
         if isinstance(key, str):
             for x in self.__iter__():
                 if x[1] == key:
-                    return x[2:]
+                    return _KeyView(self, key)
             return llll()
 
         if isinstance(key, slice):
@@ -488,6 +488,45 @@ class llll:
 
     def write(self, file: str) -> None:
         Parser.serialize(l=self, file=file)
+
+
+class _KeyView(llll):
+
+    def __init__(self, container: llll, key: str):
+        self._container = container
+        self._key = key
+
+    def _entry(self) -> llll:
+        for x in self._container.__iter__():
+            if x[1] == self._key:
+                return x
+        raise KeyError(self._key)
+
+    @property
+    def _items(self):
+        return self._entry()._items[1:]
+
+    def append(self, item) -> None:
+        if isinstance(item, (llll, list, tuple)) and len(item) == 0:
+            return
+        self._entry()._items.append(self._to_llll(item))
+
+    def __setitem__(self, key, value) -> None:
+        entry = self._entry()
+
+        if isinstance(key, int):
+            entry[key + 1 if key > 0 else key] = value
+            return
+
+        if isinstance(key, (tuple, list)):
+            head, *rest = key
+            head_key = head + 1 if isinstance(head, int) and head > 0 else head
+            entry[(head_key, *rest) if rest else head_key] = value
+            return
+
+        tail = llll(*[i.to_python() for i in entry._items[1:]])
+        tail[key] = value
+        entry._items[1:] = tail._items
 
 
 class Parser:
